@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { ArrowRight } from "lucide-react";
 
 const HERO_IMAGES = [
@@ -11,12 +11,13 @@ const HERO_IMAGES = [
   "https://images.unsplash.com/photo-1543087903-1ac2364bef05?w=800&q=80",
 ];
 
+const emptySubscribe = () => () => {};
+
 export default function HeroSection() {
   const [activeImage, setActiveImage] = useState(0);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
   useEffect(() => {
-    setMounted(true);
     const timer = setInterval(() => {
       setActiveImage((prev) => (prev + 1) % HERO_IMAGES.length);
     }, 4000);

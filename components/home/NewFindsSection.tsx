@@ -1,10 +1,29 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ProductCard from "@/components/products/ProductCard";
-import { getNewFinds } from "@/lib/sample-data";
+import { fetchProducts } from "@/lib/supabase/queries";
 
-export default function NewFindsSection() {
-  const products = getNewFinds(8);
+export default async function NewFindsSection() {
+  const dbProducts = await fetchProducts({ limit: 8, sort: "newest" });
+
+  const products = dbProducts.map((p) => ({
+    id: p.id,
+    slug: p.slug,
+    name: p.name,
+    price: p.price,
+    originalPrice: p.original_price ?? undefined,
+    category: p.category,
+    size: p.size,
+    color: p.color,
+    material: p.material,
+    condition: p.condition,
+    description: p.description,
+    images: p.images.length > 0 ? p.images : ["/placeholder.jpg"],
+    styleTags: p.style_tags,
+    isAvailable: p.is_available,
+    isNew: p.is_new,
+    createdAt: p.created_at,
+  }));
 
   return (
     <section className="bg-[#E5E5E7] py-20">
@@ -32,12 +51,26 @@ export default function NewFindsSection() {
           </Link>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {/* Grid or empty state */}
+        {products.length === 0 ? (
+          <div className="py-16 text-center">
+            <p
+              className="text-4xl font-black text-[#D0D0D3] uppercase mb-3"
+              style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+            >
+              Drops Coming Soon.
+            </p>
+            <p className="text-[#686868] text-sm font-medium">
+              We&apos;re sourcing fresh pre-loved pieces. Stay tuned.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -1,46 +1,40 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Search, X, ArrowRight } from "lucide-react";
 import { useSearch } from "@/context/SearchContext";
 import { SAMPLE_PRODUCTS } from "@/lib/sample-data";
-import { Product } from "@/lib/types";
 
 export default function SearchOverlay() {
   const { isOpen, query, closeSearch, setQuery } = useSearch();
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-  const [results, setResults] = useState<Product[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
-  // Focus input when opened
-  useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 100);
-      setSelectedIndex(-1);
-    }
-  }, [isOpen]);
-
-  // Filter results as user types
-  useEffect(() => {
-    if (!query.trim()) {
-      setResults([]);
-      return;
-    }
+  const results = useMemo(() => {
+    if (!query.trim()) return [];
     const q = query.toLowerCase();
-    const matches = SAMPLE_PRODUCTS.filter(
+    return SAMPLE_PRODUCTS.filter(
       (p) =>
         p.name.toLowerCase().includes(q) ||
         p.category.toLowerCase().includes(q) ||
         p.color.toLowerCase().includes(q) ||
         p.styleTags.some((t) => t.toLowerCase().includes(q))
     ).slice(0, 6);
-    setResults(matches);
-    setSelectedIndex(-1);
   }, [query]);
+
+  // Focus input when opened
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+        setSelectedIndex(-1);
+      }, 100);
+    }
+  }, [isOpen]);
 
   // Keyboard nav
   useEffect(() => {
@@ -82,7 +76,10 @@ export default function SearchOverlay() {
             type="text"
             placeholder="Search for pieces..."
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setSelectedIndex(-1);
+            }}
             className="flex-1 text-[#111111] text-base font-medium placeholder-[#686868] outline-none bg-transparent"
           />
           <button

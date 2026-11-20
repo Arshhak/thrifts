@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import HeroSection from "@/components/home/HeroSection";
 import NewFindsSection from "@/components/home/NewFindsSection";
 import CategoriesSection from "@/components/home/CategoriesSection";
@@ -11,8 +12,12 @@ export default function HomePage() {
     <>
       <SearchOverlay />
       <HeroSection />
-      <NewFindsSection />
-      <CategoriesSection />
+      <Suspense fallback={<div className="bg-[#E5E5E7] py-20 min-h-[400px]" />}>
+        <NewFindsSection />
+      </Suspense>
+      <Suspense fallback={<div className="bg-[#F2F2F2] py-20 min-h-[400px]" />}>
+        <CategoriesSection />
+      </Suspense>
       <StyleDiscoverySection />
       <EditorialBanner />
       <BrandStorySection />

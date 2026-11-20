@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Archivo+Black&family=Bebas+Neue&display=swap");
+@import "tailwindcss";
 
 @theme inline {
   --color-primary-bg: #E5E5E7;

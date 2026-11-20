@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { Instagram } from "lucide-react";
 import { BRAND } from "@/lib/constants";
 
 export default function Footer() {
-  const year = new Date().getFullYear();
+  const year = 2026;
 
   return (
     <footer className="bg-[#171717] text-white overflow-hidden">
@@ -70,7 +69,11 @@ export default function Footer() {
                 className="flex items-center gap-3 text-white/60 hover:text-white transition-colors group"
               >
                 <span className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center group-hover:border-[#A32626] group-hover:bg-[#A32626] transition-all">
-                  <Instagram size={16} />
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                  </svg>
                 </span>
                 <span className="text-sm font-medium uppercase tracking-wider">Instagram</span>
               </a>

@@ -23,7 +23,10 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
     const stored = localStorage.getItem("kk-wishlist");
     if (stored) {
       try {
-        setWishlist(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        queueMicrotask(() => {
+          setWishlist(parsed);
+        });
       } catch {}
     }
   }, []);

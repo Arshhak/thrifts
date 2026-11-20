@@ -23,6 +23,38 @@ export interface Category {
   image: string;
 }
 
+// ─── Supabase DB row types (snake_case, matching actual schema) ───────────────
+
+export interface DbCategory {
+  id: string;
+  name: string;
+  slug: string;
+  image_url: string | null;
+  created_at: string;
+}
+
+export interface DbProduct {
+  id: string;
+  name: string;
+  slug: string;
+  price: number;
+  original_price: number | null;
+  category_id?: string | null;
+  /** Resolved category name from join or column */
+  category: string;
+  brand?: string;
+  size: string;
+  color: string;
+  material: string;
+  condition: "Excellent" | "Good" | "Fair";
+  description: string;
+  status?: string;
+  style_tags: string[];
+  is_available: boolean;
+  is_new: boolean;
+  created_at: string;
+}
+
 export interface FilterState {
   category: string[];
   size: string[];
